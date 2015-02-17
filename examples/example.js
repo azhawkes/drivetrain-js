@@ -1,12 +1,10 @@
-var drivetrain = require("../index");
+var drivetrain = require("../drivetrain");
 
 drivetrain.configure({
     // settings
 });
 
 drivetrain.run([
-    drivetrain.get('http://localhost:4000/hello'),
-
     drivetrain.get('http://www.loadsterperformance.com').withResources([
         '/main.css',
         '/main.js',
