@@ -29,9 +29,9 @@ drivetrain.run([
     drivetrain.wait(3000),
 
     drivetrain.get("/vehicles").inspect(function (context, headers, body) {
-        vehicleId = JSON.parse(body)[0].vehicle_id; // extract our vehicle_id
+        vehicleId = JSON.parse(body)[0].id; // extract our vehicle_id
     }).then(function() {
-        drivetrain.get("/vehicles/" + vehicleId + "/command/honk_horn").validateBodyAsJson(function (body) {
+        drivetrain.get("/vehicles/" + vehicleId + "/command/flash_lights").validateBodyAsJson(function (body) {
             console.log("horn honked? " + body.result);
 
             return body.result;
