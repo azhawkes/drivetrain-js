@@ -1,3 +1,11 @@
+//
+// This example uses Drivetrain to log in to your Tesla account, parse a list of your vehicles, and then
+// programmatically HONK THE HORN of your Tesla Model S.
+//
+// We're pointing at a mock API, but if you're lucky enough to own a Model S, try it with your real Tesla
+// account!
+//
+
 var drivetrain = require("../drivetrain");
 var teslaUsername = "rich.guy@teslamotors.com";
 var teslaPassword = "iamrich";
