@@ -1,6 +1,6 @@
 {
   "name": "drivetrain",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "HTTP automation, testing and validation",
   "main": "drivetrain.js",
   "directories": {
