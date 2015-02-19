@@ -32,7 +32,7 @@ drivetrain.run([
         vehicleId = JSON.parse(body)[0].id; // extract our vehicle_id
     }).then(function() {
         drivetrain.get("/vehicles/" + vehicleId + "/command/flash_lights").validateBodyAsJson(function (body) {
-            console.log("horn honked? " + body.result);
+            console.log("lights flashed? " + body.result);
 
             return body.result;
         }).run();
