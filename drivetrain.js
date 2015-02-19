@@ -9,6 +9,8 @@ module.exports = {
 
     runParallel: drivetrain.runParallel,
 
+    context: drivetrain.context,
+
     get: function (url) {
         return http.get(drivetrain.context, url);
     },

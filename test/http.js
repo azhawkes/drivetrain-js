@@ -198,30 +198,6 @@ describe('http', function () {
         // TODO
     });
 
-    it('', function (done) {
-        // TODO
-    });
-
-    it('', function (done) {
-        // TODO
-    });
-
-    it('', function (done) {
-        // TODO
-    });
-
-    it('', function (done) {
-        // TODO
-    });
-
-    it('', function (done) {
-        // TODO
-    });
-
-    it('', function (done) {
-        // TODO
-    });
-
     it('should validate response header equals', function (done) {
         // TODO
     });
@@ -250,8 +226,16 @@ describe('http', function () {
         // TODO
     });
 
-    it('should be able to set context variables when inspecting responses', function (done) {
-        // TODO
+    it('should be able to interpolate context variables', function (done) {
+        drivetrain.context.setVariable('name', 'Andy');
+
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello?name={{name}}').inspect(function (context, headers, body) {
+                assert.equal(body, 'Hello Andy');
+
+                done();
+            })
+        ]);
     });
 
     after(function(done) {
