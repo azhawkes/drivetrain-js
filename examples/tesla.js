@@ -16,8 +16,6 @@ drivetrain.configure({
     acceptCookies: true
 });
 
-var vehicleId = ""; // we'll parse this from a response
-
 drivetrain.run([
     drivetrain.get("/login"),
 
@@ -29,12 +27,14 @@ drivetrain.run([
     drivetrain.wait(3000),
 
     drivetrain.get("/vehicles").inspect(function (context, headers, body) {
-        vehicleId = JSON.parse(body)[0].id; // extract our vehicle_id
-    }).then(function() {
-        drivetrain.get("/vehicles/" + vehicleId + "/command/flash_lights").validateBodyAsJson(function (body) {
-            console.log("lights flashed? " + body.result);
+        context.setVariable("vehicleId", JSON.parse(body)[0].id); // save our vehicle id for later use
+    }),
 
-            return body.result;
-        }).run();
+    drivetrain.get("/vehicles/{{vehicleId}}/command/honk_horn").validateBodyAsJson(function (body) {
+        if (body.result) {
+            console.log("your horn just honked!");
+        }
+
+        return body.result;
     })
 ]);
