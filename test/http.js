@@ -39,6 +39,16 @@ describe('http', function () {
             res.send(req.body);
         });
 
+        app.get('/echo_x_headers', function (req, res) {
+            for (var name in req.headers) {
+                if (req.headers.hasOwnProperty(name) && name.indexOf("x-") == 0) {
+                    res.header(name, req.headers[name.toLowerCase()])
+                }
+            }
+
+            res.send("Sending you some headers");
+        });
+
         app.options('/options', function (req, res) {
             res.type("text/plain");
             res.send("options");
@@ -60,9 +70,8 @@ describe('http', function () {
 
     it('should be able to do a simple GET', function (done) {
         drivetrain.run([
-            drivetrain.get('http://localhost:4000/hello').inspect(function (context, headers, body) {
-                console.log("got 1");
-                assert.equal(body, 'Hello');
+            drivetrain.get('http://localhost:4000/hello').inspect(function (response) {
+                assert.equal(response.body, 'Hello');
                 done();
             })
         ]);
@@ -70,8 +79,8 @@ describe('http', function () {
 
     it('should be able to do a GET with inline query string', function (done) {
         drivetrain.run([
-            drivetrain.get('http://localhost:4000/hello?name=Andy').inspect(function (context, headers, body) {
-                assert.equal(body, 'Hello Andy');
+            drivetrain.get('http://localhost:4000/hello?name=Andy').inspect(function (response) {
+                assert.equal(response.body, 'Hello Andy');
                 done();
             })
         ]);
@@ -79,8 +88,8 @@ describe('http', function () {
 
     it('should be able to do a GET with text query string', function (done) {
         drivetrain.run([
-            drivetrain.get('http://localhost:4000/hello').withQueryString('name=Andy').inspect(function (context, headers, body) {
-                assert.equal(body, 'Hello Andy');
+            drivetrain.get('http://localhost:4000/hello').withQueryString('name=Andy').inspect(function (response) {
+                assert.equal(response.body, 'Hello Andy');
                 done();
             })
         ]);
@@ -88,8 +97,8 @@ describe('http', function () {
 
     it('should be able to do a GET with object query string', function (done) {
         drivetrain.run([
-            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (context, headers, body) {
-                assert.equal(body, 'Hello Andy');
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (response) {
+                assert.equal(response.body, 'Hello Andy');
                 done();
             })
         ]);
@@ -97,8 +106,8 @@ describe('http', function () {
 
     it('should be able to do a POST with form body', function (done) {
         drivetrain.run([
-            drivetrain.post('http://localhost:4000/hello').withFormBody({name: 'Andy'}).inspect(function (context, headers, body) {
-                assert.equal(body, 'Hello Andy');
+            drivetrain.post('http://localhost:4000/hello').withFormBody({name: 'Andy'}).inspect(function (response) {
+                assert.equal(response.body, 'Hello Andy');
                 done();
             })
         ]);
@@ -106,8 +115,8 @@ describe('http', function () {
 
     it('should be able to do a POST with manual form body', function (done) {
         drivetrain.run([
-            drivetrain.post('http://localhost:4000/hello').withBody('name=Andy').withContentType("application/x-www-form-urlencoded").inspect(function (context, headers, body) {
-                assert.equal(body, 'Hello Andy');
+            drivetrain.post('http://localhost:4000/hello').withBody('name=Andy').withContentType("application/x-www-form-urlencoded").inspect(function (response) {
+                assert.equal(response.body, 'Hello Andy');
                 done();
             })
         ]);
@@ -115,8 +124,8 @@ describe('http', function () {
 
     it('should be able to do a POST with JSON body', function (done) {
         drivetrain.run([
-            drivetrain.post('http://localhost:4000/hello').withJsonBody({name: 'Andy'}).inspect(function (context, headers, body) {
-                assert.equal(body, 'Hello Andy');
+            drivetrain.post('http://localhost:4000/hello').withJsonBody({name: 'Andy'}).inspect(function (response) {
+                assert.equal(response.body, 'Hello Andy');
                 done();
             })
         ]);
@@ -124,8 +133,8 @@ describe('http', function () {
 
     it('should be able to do a POST with plain text body', function (done) {
         drivetrain.run([
-            drivetrain.post('http://localhost:4000/echo').withBody('asdf').withContentType('text/plain').inspect(function (context, headers, body) {
-                assert.equal(body, 'asdf');
+            drivetrain.post('http://localhost:4000/echo').withBody('asdf').withContentType('text/plain').inspect(function (response) {
+                assert.equal(response.body, 'asdf');
                 done();
             })
         ]);
@@ -137,8 +146,8 @@ describe('http', function () {
         buf.fill(29320);
 
         drivetrain.run([
-            drivetrain.post('http://localhost:4000/echo').withBody(buf).withContentType('application/octet-stream').inspect(function (context, headers, body) {
-                assert.equal(body, buf);
+            drivetrain.post('http://localhost:4000/echo').withBody(buf).withContentType('application/octet-stream').inspect(function (response) {
+                assert.equal(response.body, buf);
                 done();
             })
         ]);
@@ -154,8 +163,8 @@ describe('http', function () {
 
     it('should be able to do OPTIONS', function (done) {
         drivetrain.run([
-            drivetrain.options('http://localhost:4000/options').inspect(function (context, headers, body) {
-                assert.equal(body, "options");
+            drivetrain.options('http://localhost:4000/options').inspect(function (response) {
+                assert.equal(response.body, "options");
 
                 done();
             })
@@ -164,8 +173,8 @@ describe('http', function () {
 
     it('should be able to do TRACE', function (done) {
         drivetrain.run([
-            drivetrain.trace('http://localhost:4000/trace').inspect(function (context, headers, body) {
-                assert.equal(body, "trace");
+            drivetrain.trace('http://localhost:4000/trace').inspect(function (response) {
+                assert.equal(response.body, "trace");
 
                 done();
             })
@@ -174,8 +183,8 @@ describe('http', function () {
 
     it('should be able to do custom verbs', function (done) {
         drivetrain.run([
-            drivetrain.method('PATCH', 'http://localhost:4000/patch').inspect(function (context, headers, body) {
-                assert.equal(body, "patch");
+            drivetrain.method('PATCH', 'http://localhost:4000/patch').inspect(function (response) {
+                assert.equal(response.body, "patch");
 
                 done();
             })
@@ -191,46 +200,14 @@ describe('http', function () {
     });
 
     it('should send custom headers', function (done) {
-        // TODO
-    });
-
-    it('should override custom headers when called twice', function (done) {
-        // TODO
-    });
-
-    it('should validate response status codes', function (done) {
-            drivetrain.run([
-                drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).validateStatus(300)
-            ]).then(function() {
-                done();
-            });
-    });
-
-    it('should validate response header equals', function (done) {
-        // TODO
-    });
-
-    it('should validate response header contains', function (done) {
-        // TODO
-    });
-
-    it('should validate response header with a custom function', function (done) {
-        // TODO
-    });
-
-    it('should validate response body contains', function (done) {
-        // TODO
-    });
-
-    it('should validate response body as string with a custom function', function (done) {
-        // TODO
-    });
-
-    it('should validate assertions', function (done) {
         drivetrain.run([
-            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).validateAssertions(function (assert) {
+            drivetrain.get('http://localhost:4000/echo_x_headers').withHeaders({
+                "X-Foo": "Bar",
+                "X-Bar": "Foo"
+            }).inspect(function (response) {
                 try {
-                    assert.statusCode.should.equal(300);
+                    drivetrain.assertEqual(response.headers["x-foo"], "Bar");
+                    drivetrain.assertEqual(response.headers["x-bar"], "Foo");
 
                     done();
                 } catch (e) {
@@ -240,20 +217,64 @@ describe('http', function () {
         ]);
     });
 
-    it('should inspect response headers', function (done) {
-        // TODO
+    it('should pass true assertions', function (done) {
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (response) {
+                try {
+                    drivetrain.assert(response.statusCode == 200);
+
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            })
+        ]);
     });
 
-    it('should inspect response bodies', function (done) {
-        // TODO
+    it('should fail false assertions', function (done) {
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (response) {
+                try {
+                    drivetrain.assert(response.statusCode == 700);
+                } catch (e) {
+                    done();
+                }
+            })
+        ]);
+    });
+
+    it('should pass equal assertions', function (done) {
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (response) {
+                try {
+                    drivetrain.assertEqual(response.statusCode, 200);
+
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            })
+        ]);
+    });
+
+    it('should fail unequal assertions', function (done) {
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (response) {
+                try {
+                    drivetrain.assertEqual(response.statusCode, 700);
+                } catch (e) {
+                    done();
+                }
+            })
+        ]);
     });
 
     it('should be able to interpolate context variables', function (done) {
-        drivetrain.context.setVariable('name', 'Andy');
+        drivetrain.setVariable('name', 'Andy');
 
         drivetrain.run([
-            drivetrain.get('http://localhost:4000/hello?name={{name}}').inspect(function (context, headers, body) {
-                assert.equal(body, 'Hello Andy');
+            drivetrain.get('http://localhost:4000/hello?name={{name}}').inspect(function (response) {
+                assert.equal(response.body, 'Hello Andy');
 
                 done();
             })
