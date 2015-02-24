@@ -269,6 +269,58 @@ describe('http', function () {
         ]);
     });
 
+    it('should pass true contains assertions', function (done) {
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (response) {
+                try {
+                    drivetrain.assertContains(response.body, 'Andy');
+
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            })
+        ]);
+    });
+
+    it('should fail false contains assertions', function (done) {
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (response) {
+                try {
+                    drivetrain.assertContains(response.body, 'Zebog');
+                } catch (e) {
+                    done();
+                }
+            })
+        ]);
+    });
+
+    it('should pass true matches assertions', function (done) {
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (response) {
+                try {
+                    drivetrain.assertMatches(response.body, /Hello (\w+)/);
+
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            })
+        ]);
+    });
+
+    it('should fail false matches assertions', function (done) {
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).inspect(function (response) {
+                try {
+                    drivetrain.assertMatches(response.body, /Hello (\d+)/);
+                } catch (e) {
+                    done();
+                }
+            })
+        ]);
+    });
+
     it('should be able to interpolate context variables', function (done) {
         drivetrain.setVariable('name', 'Andy');
 

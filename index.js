@@ -47,5 +47,9 @@ module.exports = {
 
     assertEqual: drivetrain.assertEqual,
 
+    assertContains: drivetrain.assertContains,
+
+    assertMatches: drivetrain.assertMatches,
+
     setVariable: drivetrain.setVariable
 };
