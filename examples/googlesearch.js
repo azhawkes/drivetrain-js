@@ -2,7 +2,7 @@
 // Simple example that shows how to run a Google search.
 //
 
-var drivetrain = require("../drivetrain");
+var drivetrain = require("../index");
 
 drivetrain.run([
     drivetrain.get('https://www.google.com/').withResources([

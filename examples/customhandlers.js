@@ -5,7 +5,7 @@
 // JSON.
 //
 
-var drivetrain = require("../drivetrain");
+var drivetrain = require("../index");
 
 drivetrain.configure({
 

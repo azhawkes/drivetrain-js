@@ -6,7 +6,7 @@
 // account!
 //
 
-var drivetrain = require("../drivetrain");
+var drivetrain = require("../index");
 var teslaUsername = "rich.guy@teslamotors.com";
 var teslaPassword = "iamrich";
 

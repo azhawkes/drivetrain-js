@@ -1,5 +1,5 @@
+var drivetrain = require('../index');
 var assert = require('assert');
-var drivetrain = require('../drivetrain');
 
 describe('http', function () {
     var harness;

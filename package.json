@@ -2,7 +2,7 @@
   "name": "drivetrain",
   "version": "0.0.2",
   "description": "HTTP automation, testing and validation",
-  "main": "drivetrain.js",
+  "main": "index.js",
   "directories": {
     "test": "test"
   },
