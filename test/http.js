@@ -4,7 +4,7 @@ var drivetrain = require('../drivetrain');
 describe('http', function () {
     var harness;
 
-    before(function(done) {
+    before(function (done) {
         var express = require('express');
         var bodyParser = require('body-parser');
         var multer = require('multer');
@@ -15,7 +15,7 @@ describe('http', function () {
         app.use(bodyParser.raw());
         app.use(bodyParser.text());
         app.use(bodyParser.json()); // for parsing application/json
-        app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+        app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
         app.use(multer()); // for parsing multipart/form-data
 
         app.get('/hello', function (req, res) {
@@ -198,6 +198,14 @@ describe('http', function () {
         // TODO
     });
 
+    it('should validate response status codes', function (done) {
+            drivetrain.run([
+                drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).validateStatus(300)
+            ]).then(function() {
+                done();
+            });
+    });
+
     it('should validate response header equals', function (done) {
         // TODO
     });
@@ -216,6 +224,20 @@ describe('http', function () {
 
     it('should validate response body as string with a custom function', function (done) {
         // TODO
+    });
+
+    it('should validate assertions', function (done) {
+        drivetrain.run([
+            drivetrain.get('http://localhost:4000/hello').withQueryString({name: 'Andy'}).validateAssertions(function (assert) {
+                try {
+                    assert.statusCode.should.equal(300);
+
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            })
+        ]);
     });
 
     it('should inspect response headers', function (done) {
@@ -238,7 +260,7 @@ describe('http', function () {
         ]);
     });
 
-    after(function(done) {
+    after(function (done) {
         harness.server.close(done);
     });
 });

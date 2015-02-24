@@ -12,34 +12,40 @@ module.exports = {
     context: drivetrain.context,
 
     get: function (url) {
-        return http.get(drivetrain.context, url);
+        return http.get(drivetrain, url);
     },
 
     post: function (url) {
-        return http.post(drivetrain.context, url);
+        return http.post(drivetrain, url);
     },
 
     put: function (url) {
-        return http.put(drivetrain.context, url);
+        return http.put(drivetrain, url);
     },
 
     delete: function (url) {
-        return http.delete(drivetrain.context, url);
+        return http.delete(drivetrain, url);
     },
 
     options: function (url) {
-        return http.options(drivetrain.context, url);
+        return http.options(drivetrain, url);
     },
 
     trace: function (url) {
-        return http.trace(drivetrain.context, url);
+        return http.trace(drivetrain, url);
     },
 
     method: function (method, url) {
-        return http.method(drivetrain.context, method, url);
+        return http.method(drivetrain, method, url);
     },
 
     wait: function (ms) {
-        return wait.wait(drivetrain.context, ms);
-    }
+        return wait.wait(drivetrain, ms);
+    },
+
+    assert: drivetrain.assert,
+
+    assertEqual: drivetrain.assertEqual,
+
+    setVariable: drivetrain.setVariable
 };
