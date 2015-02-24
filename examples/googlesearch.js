@@ -11,7 +11,7 @@ drivetrain.run([
     ]).inspect(function (response) {
         drivetrain.assertEqual(response.statusCode, 200);
         drivetrain.assertEqual(response.headers["content-type"], 'text/html; charset=ISO-8859-1');
-        drivetrain.assert(response.body.indexOf("I'm Feeling Lucky") >= 0);
+        drivetrain.assertContains(response.body, "I'm Feeling Lucky");
         drivetrain.assert(response.body.length > 2000);
     }),
 
@@ -20,7 +20,7 @@ drivetrain.run([
     drivetrain.get('https://www.google.com/search?q=lolcats').withHeaders({
         "Referer": "https://www.google.com"
     }).inspect(function (response) {
-        drivetrain.assert(response.body.indexOf("Cheezburger") >= 0);
+        drivetrain.assertMatches(response.body, /Cheezburger/i);
     })
 ], function () {
     console.log("Done!");
