@@ -51,5 +51,7 @@ module.exports = {
 
     assertMatches: drivetrain.assertMatches,
 
+    getTime: drivetrain.getTime,
+
     setVariable: drivetrain.setVariable
 };
